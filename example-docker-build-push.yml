@@ -10,16 +10,16 @@ resources:
   - name: build_info_dbp
     type: BuildInfo
     configuration:
-      sourceArtifactory: demoArt
-      buildName: svc_build
-      buildNumber: 1
+      sourceArtifactory: demoArt  # replace with your Artifactory integration
+      buildName: svc_build  # build name will be overwritten by pipeline name when used in Native steps
+      buildNumber: 1  # build number will be overwritten by run number when used in Native steps
 
   - name: promoted_build_info_dbp
     type: BuildInfo
     configuration:
-      sourceArtifactory: demoArt
-      buildName: svc_build
-      buildNumber: 1
+      sourceArtifactory: demoArt  # replace with your Artifactory integration
+      buildName: svc_build  # build name will be overwritten by pipeline name when used in Native steps
+      buildNumber: 1  # build number will be overwritten by run number when used in Native steps
 
 pipelines:
   - name: example_docker_build_push_pipeline
@@ -29,19 +29,19 @@ pipelines:
         configuration:
           dockerFileLocation: .
           dockerFileName: Dockerfile
-          dockerImageName: pipe-master.jfrog.info:8082/docker-local/alpine37
+          dockerImageName: pipe-master.jfrog.info:8082/docker-local/alpine37  # replace with the image name you want
           dockerImageTag: ${run_number}
           inputResources:
             - name: example_dbp_repo
           integrations:
-            - name: demoArt
+            - name: demoArt # replace with your Artifactory integration
 
       - name: docker_push
         type: DockerPush
         configuration:
-          targetRepository: docker-local
+          targetRepository: docker-local  # replace if needed
           integrations:
-            - name: demoArt
+            - name: demoArt # replace with your Artifactory integration
           inputSteps:
             - name: docker_build
 
@@ -56,9 +56,9 @@ pipelines:
       - name: promote_build
         type: PromoteBuild
         configuration:
-          targetRepository: promoted-pipelines
+          targetRepository: promoted-pipelines  # replace with your target repo. Step will fail if this repo doesn't exist
           integrations:
-            - name: demoArt
+            - name: demoArt # replace with your Artifactory integration
           inputResources:
             - name: build_info_dbp
           outputResources:
